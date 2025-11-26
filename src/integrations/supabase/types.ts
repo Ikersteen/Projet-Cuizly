@@ -193,51 +193,6 @@ export type Database = {
         }
         Relationships: []
       }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          created_at: string
-          email: string | null
-          first_name: string | null
-          id: string
-          last_name: string | null
-          phone: string | null
-          restaurant_name: string | null
-          updated_at: string
-          user_id: string
-          user_type: Database["public"]["Enums"]["user_type"]
-          username: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          email?: string | null
-          first_name?: string | null
-          id?: string
-          last_name?: string | null
-          phone?: string | null
-          restaurant_name?: string | null
-          updated_at?: string
-          user_id: string
-          user_type?: Database["public"]["Enums"]["user_type"]
-          username?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string
-          email?: string | null
-          first_name?: string | null
-          id?: string
-          last_name?: string | null
-          phone?: string | null
-          restaurant_name?: string | null
-          updated_at?: string
-          user_id?: string
-          user_type?: Database["public"]["Enums"]["user_type"]
-          username?: string | null
-        }
-        Relationships: []
-      }
       restaurants: {
         Row: {
           address: string | null
@@ -391,6 +346,51 @@ export type Database = {
           role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      waitlist: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          phone: string | null
+          restaurant_name: string | null
+          updated_at: string
+          user_id: string | null
+          user_type: Database["public"]["Enums"]["user_type"]
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          restaurant_name?: string | null
+          updated_at?: string
+          user_id?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"]
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          restaurant_name?: string | null
+          updated_at?: string
+          user_id?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"]
+          username?: string | null
         }
         Relationships: []
       }
