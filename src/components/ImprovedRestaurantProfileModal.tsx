@@ -131,10 +131,10 @@ export const ImprovedRestaurantProfileModal = ({
 
       // Also load profile data for username
       const { data: profileData } = await supabase
-        .from('waitlist')
+        .from('profiles')
         .select('username')
         .eq('user_id', session.user.id)
-        .maybeSingle();
+        .single();
 
       setRestaurant(data);
       setFormData({
@@ -454,10 +454,10 @@ export const ImprovedRestaurantProfileModal = ({
 
       if (error) throw error;
 
-      // Update username in waitlist table
+      // Update username in profiles table
       if (formData.username.trim()) {
         const { error: profileError } = await supabase
-          .from('waitlist')
+          .from('profiles')
           .update({ username: formData.username.trim() })
           .eq('user_id', session.user.id);
         

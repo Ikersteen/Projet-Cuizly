@@ -42,7 +42,7 @@ const Dashboard = () => {
           const newUsername = await generateUniqueUsername(supabase);
           
           const { error: updateError } = await supabase
-            .from('waitlist')
+            .from('profiles')
             .update({ username: newUsername })
             .eq('user_id', user.id);
           

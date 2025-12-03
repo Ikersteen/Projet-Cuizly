@@ -45,10 +45,10 @@ const RealtimeVoiceInterface: React.FC<RealtimeVoiceInterfaceProps> = ({ onClose
       if (session?.user) {
         setUserId(session.user.id);
         const { data: profile } = await supabase
-          .from('waitlist')
+          .from('profiles')
           .select('*')
           .eq('user_id', session.user.id)
-          .maybeSingle();
+          .single();
         setUserProfile(profile);
         
         // Charger la dernière conversation vocale ou en créer une nouvelle

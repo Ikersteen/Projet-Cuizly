@@ -37,7 +37,7 @@ export const withRetry = async <T>(
 export const checkConnection = async (): Promise<boolean> => {
   try {
     const { data, error } = await supabase
-      .from('waitlist')
+      .from('profiles')
       .select('id')
       .limit(1);
     

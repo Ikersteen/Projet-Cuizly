@@ -105,10 +105,10 @@ const Auth = () => {
           try {
             // Check if user has profile, create if needed
             const { data: profile, error: profileError } = await supabase
-              .from('waitlist')
+              .from('profiles')
               .select('*')
               .eq('user_id', session.user.id)
-              .maybeSingle();
+              .single();
 
             console.log("🔵 [Auth State Change] Profile exists:", !!profile);
             
@@ -125,7 +125,7 @@ const Auth = () => {
                 await createUserProfile(session.user);
               } else {
                 // Sinon, créer un profil basique pour utilisateur OAuth
-                const { error: createError } = await supabase.from('waitlist').insert({
+                const { error: createError } = await supabase.from('profiles').insert({
                   user_id: session.user.id,
                   first_name: session.user.user_metadata?.full_name?.split(' ')[0] || 
                              session.user.user_metadata?.name?.split(' ')[0] || '',
@@ -152,10 +152,10 @@ const Auth = () => {
             
             // Fetch profile to generate personalized URL
             const { data: userProfile } = await supabase
-              .from('waitlist')
+              .from('profiles')
               .select('*')
               .eq('user_id', session.user.id)
-              .maybeSingle();
+              .single();
             
             if (userProfile) {
               // Import generateUserUrl dynamically to avoid circular dependencies
@@ -364,10 +364,10 @@ const Auth = () => {
         
         // Generate personalized dashboard URL
         const { data: profileData } = await supabase
-          .from('waitlist')
+          .from('profiles')
           .select('*')
           .eq('user_id', data.user.id)
-          .maybeSingle();
+          .single();
         
         let restaurantData = null;
         if (userType === 'restaurant_owner') {
@@ -415,7 +415,7 @@ const Auth = () => {
 
   const createUserProfile = async (user: any) => {
     try {
-      const { error } = await supabase.from('waitlist').insert({
+      const { error } = await supabase.from('profiles').insert({
         user_id: user.id,
         first_name: user.user_metadata.full_name?.split(' ')[0] || '',
         last_name: user.user_metadata.full_name?.split(' ').slice(1).join(' ') || '',
