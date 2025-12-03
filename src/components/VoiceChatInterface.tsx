@@ -96,10 +96,10 @@ const VoiceChatInterface: React.FC<VoiceChatInterfaceProps> = ({ onClose }) => {
         setUserId(session.user.id);
         setIsAnonymous(false);
         const { data: profile } = await supabase
-          .from('profiles')
+          .from('waitlist')
           .select('*')
           .eq('user_id', session.user.id)
-          .single();
+          .maybeSingle();
         setUserProfile(profile);
         
         // Suivre la localisation de l'utilisateur

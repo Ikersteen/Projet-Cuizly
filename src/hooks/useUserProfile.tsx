@@ -39,7 +39,7 @@ export const useUserProfile = () => {
       }
     );
 
-    // Set up real-time subscription for profile changes
+  // Set up real-time subscription for profile changes
     const profileSubscription = supabase
       .channel('profile_changes')
       .on(
@@ -47,13 +47,13 @@ export const useUserProfile = () => {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'profiles'
+          table: 'waitlist'
         },
         (payload) => {
           // If this is the current user's profile, refresh it
           const currentUser = supabase.auth.getUser();
           currentUser.then(({ data: { user } }) => {
-            if (user && payload.new.user_id === user.id) {
+            if (user && (payload.new as any).user_id === user.id) {
               fetchProfile(user.id);
             }
           });
@@ -75,13 +75,16 @@ export const useUserProfile = () => {
       while (retryCount < maxRetries) {
         try {
           const { data, error } = await supabase
-            .from('profiles')
+            .from('waitlist')
             .select('user_type, username')
             .eq('user_id', userId)
             .maybeSingle();
           
           if (!error) {
-            const profileData = data || { user_type: 'consumer' };
+            const profileData: Profile = data ? { 
+              user_type: data.user_type as 'consumer' | 'restaurant_owner', 
+              username: data.username || undefined 
+            } : { user_type: 'consumer' };
             setProfile(profileData);
             setLoading(false);
             return;
