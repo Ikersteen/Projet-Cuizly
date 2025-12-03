@@ -55,8 +55,8 @@ export const useProfile = () => {
       while (retryCount < maxRetries) {
         try {
           const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
+            .from('waitlist')
+            .select('id, user_id, first_name, last_name, phone, username, avatar_url, email')
             .eq('user_id', session.user.id)
             .maybeSingle();
 
@@ -64,7 +64,20 @@ export const useProfile = () => {
             throw error;
           }
 
-          setProfile(data);
+          if (data) {
+            setProfile({
+              id: data.id,
+              user_id: data.user_id || session.user.id,
+              first_name: data.first_name || undefined,
+              last_name: data.last_name || undefined,
+              phone: data.phone || undefined,
+              username: data.username || undefined,
+              avatar_url: data.avatar_url || undefined,
+              email: data.email || undefined,
+            });
+          } else {
+            setProfile(null);
+          }
           break;
         } catch (error) {
           console.error(`Profile load error (attempt ${retryCount + 1}):`, error);
@@ -103,14 +116,14 @@ export const useProfile = () => {
       console.log('📝 Data to upsert:', { user_id: session.user.id, ...updates });
 
       const { data, error } = await supabase
-        .from('profiles')
+        .from('waitlist')
         .upsert({
           user_id: session.user.id,
           ...updates
         }, {
           onConflict: 'user_id'
         })
-        .select()
+        .select('id, user_id, first_name, last_name, phone, username, avatar_url, email')
         .single();
 
       console.log('📊 Supabase response - data:', data);
@@ -122,7 +135,18 @@ export const useProfile = () => {
       }
 
       // Update local state immediately
-      setProfile(data);
+      if (data) {
+        setProfile({
+          id: data.id,
+          user_id: data.user_id || session.user.id,
+          first_name: data.first_name || undefined,
+          last_name: data.last_name || undefined,
+          phone: data.phone || undefined,
+          username: data.username || undefined,
+          avatar_url: data.avatar_url || undefined,
+          email: data.email || undefined,
+        });
+      }
       console.log('✅ Profile updated successfully:', data);
       
       return { success: true };

@@ -220,11 +220,11 @@ export const useAccountSettings = () => {
 
       if (updateError) throw updateError;
 
-      // Update phone in profiles table
+      // Update phone in waitlist table
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { error: profileError } = await supabase
-          .from('profiles')
+          .from('waitlist')
           .update({ phone: data.phoneNumber })
           .eq('user_id', user.id);
 
