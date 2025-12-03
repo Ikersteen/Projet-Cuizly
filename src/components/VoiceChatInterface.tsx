@@ -566,15 +566,29 @@ const VoiceChatInterface: React.FC<VoiceChatInterfaceProps> = ({ onClose }) => {
   const processTextInput = async (text: string) => {
     if (!text.trim()) return;
 
-    // Detect image generation requests
+    // Detect image generation requests - include variants with and without accents
     const imageGenerationKeywords = [
-      'génère une image', 'génère moi une image', 'crée une image', 'crée moi une image',
-      'dessine', 'dessine moi', 'illustre', 'fais une image',
-      'generate an image', 'create an image', 'draw', 'illustrate', 'make an image'
+      // French with accents
+      'génère une image', 'génère moi une image', 'génère l\'image', 'génère-moi une image',
+      'crée une image', 'crée moi une image', 'crée l\'image', 'crée-moi une image',
+      // French without accents (important for user input)
+      'genere une image', 'genere moi une image', 'genere l\'image', 'genere-moi une image',
+      'cree une image', 'cree moi une image', 'cree l\'image', 'cree-moi une image',
+      // Other French keywords
+      'dessine', 'dessine moi', 'dessine-moi', 'illustre', 'fais une image', 'fais moi une image',
+      'fait une image', 'fait moi une image', 'créer une image', 'creer une image',
+      'générer une image', 'generer une image', 'fabrique une image',
+      // English keywords
+      'generate an image', 'generate image', 'create an image', 'create image',
+      'draw', 'illustrate', 'make an image', 'make image', 'produce an image'
     ];
 
+    // Normalize text by removing accents for comparison
+    const normalizeText = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const normalizedText = normalizeText(text);
+    
     const isImageRequest = imageGenerationKeywords.some(keyword => 
-      text.toLowerCase().includes(keyword)
+      normalizedText.includes(normalizeText(keyword))
     );
 
     if (isImageRequest) {
