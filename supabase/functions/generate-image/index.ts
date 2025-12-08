@@ -21,10 +21,73 @@ serve(async (req) => {
     
     console.log('Generating image with Lovable AI for prompt:', prompt);
 
-    // Enhance the prompt for better results
-    const enhancedPrompt = language === 'en' 
-      ? `Ultra high resolution, photorealistic, professional quality: ${prompt}. High detail, vivid colors, perfect lighting, 8K quality.`
-      : `Ultra haute résolution, photoréaliste, qualité professionnelle: ${prompt}. Haute définition, couleurs vives, éclairage parfait, qualité 8K.`;
+    // Intelligent prompt enhancement based on content type
+    const enhancePrompt = (userPrompt: string, lang: string) => {
+      const lowercasePrompt = userPrompt.toLowerCase();
+      
+      // Detect image style/type from prompt
+      const isArtistic = /art|painting|drawing|sketch|illustration|cartoon|anime|watercolor|oil painting|abstract/i.test(lowercasePrompt);
+      const isPhoto = /photo|photograph|realistic|real|portrait|landscape|nature/i.test(lowercasePrompt);
+      const isFood = /food|dish|meal|recipe|cuisine|restaurant|plat|repas|nourriture/i.test(lowercasePrompt);
+      const isLogo = /logo|icon|brand|emblem|badge/i.test(lowercasePrompt);
+      const is3D = /3d|render|cgi|digital art/i.test(lowercasePrompt);
+      const isMinimal = /minimal|simple|clean|flat/i.test(lowercasePrompt);
+      
+      let stylePrefix = '';
+      let styleSuffix = '';
+      
+      if (lang === 'en') {
+        if (isArtistic) {
+          stylePrefix = 'Beautiful artistic creation, masterful technique: ';
+          styleSuffix = '. Rich details, expressive style, museum quality artwork.';
+        } else if (isLogo) {
+          stylePrefix = 'Professional logo design, clean vector style: ';
+          styleSuffix = '. Modern, memorable, scalable design with perfect symmetry.';
+        } else if (is3D) {
+          stylePrefix = 'High-quality 3D render, cinematic lighting: ';
+          styleSuffix = '. Octane render quality, realistic materials, dramatic composition.';
+        } else if (isMinimal) {
+          stylePrefix = 'Clean minimal design: ';
+          styleSuffix = '. Simple, elegant, balanced composition with purposeful whitespace.';
+        } else if (isFood) {
+          stylePrefix = 'Professional food photography, appetizing presentation: ';
+          styleSuffix = '. Gourmet styling, perfect lighting, mouth-watering details, 8K quality.';
+        } else if (isPhoto) {
+          stylePrefix = 'Professional photography, ultra high resolution: ';
+          styleSuffix = '. Perfect lighting, sharp focus, vivid colors, 8K quality.';
+        } else {
+          stylePrefix = 'High quality, detailed image: ';
+          styleSuffix = '. Professional quality, vivid colors, excellent composition, 4K resolution.';
+        }
+      } else {
+        if (isArtistic) {
+          stylePrefix = 'Belle création artistique, technique maîtrisée: ';
+          styleSuffix = '. Détails riches, style expressif, qualité musée.';
+        } else if (isLogo) {
+          stylePrefix = 'Design de logo professionnel, style vectoriel épuré: ';
+          styleSuffix = '. Moderne, mémorable, design scalable avec symétrie parfaite.';
+        } else if (is3D) {
+          stylePrefix = 'Rendu 3D haute qualité, éclairage cinématique: ';
+          styleSuffix = '. Qualité Octane render, matériaux réalistes, composition dramatique.';
+        } else if (isMinimal) {
+          stylePrefix = 'Design minimaliste épuré: ';
+          styleSuffix = '. Simple, élégant, composition équilibrée avec espaces blancs intentionnels.';
+        } else if (isFood) {
+          stylePrefix = 'Photographie culinaire professionnelle, présentation appétissante: ';
+          styleSuffix = '. Style gastronomique, éclairage parfait, détails savoureux, qualité 8K.';
+        } else if (isPhoto) {
+          stylePrefix = 'Photographie professionnelle, ultra haute résolution: ';
+          styleSuffix = '. Éclairage parfait, mise au point nette, couleurs vives, qualité 8K.';
+        } else {
+          stylePrefix = 'Image de haute qualité, détaillée: ';
+          styleSuffix = '. Qualité professionnelle, couleurs vives, excellente composition, résolution 4K.';
+        }
+      }
+      
+      return `${stylePrefix}${userPrompt}${styleSuffix}`;
+    };
+
+    const enhancedPrompt = enhancePrompt(prompt, language || 'fr');
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
