@@ -193,6 +193,137 @@ export type Database = {
         }
         Relationships: []
       }
+      restaurant_websites: {
+        Row: {
+          about_content: string | null
+          about_enabled: boolean | null
+          about_image_url: string | null
+          about_title: string | null
+          contact_enabled: boolean | null
+          contact_title: string | null
+          created_at: string
+          custom_domain: string | null
+          font_family: string | null
+          gallery_enabled: boolean | null
+          gallery_images: string[] | null
+          gallery_title: string | null
+          google_analytics_id: string | null
+          hero_cta_enabled: boolean | null
+          hero_cta_text: string | null
+          hero_image_url: string | null
+          hero_subtitle: string | null
+          hero_title: string | null
+          id: string
+          is_published: boolean
+          logo_position: string | null
+          menu_display_style: string | null
+          menu_enabled: boolean | null
+          menu_title: string | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          meta_title: string | null
+          reservations_description: string | null
+          reservations_enabled: boolean | null
+          reservations_title: string | null
+          restaurant_id: string
+          secondary_color: string | null
+          show_map: boolean | null
+          show_opening_hours: boolean | null
+          show_social_links: boolean | null
+          subdomain: string | null
+          theme_color: string | null
+          updated_at: string
+        }
+        Insert: {
+          about_content?: string | null
+          about_enabled?: boolean | null
+          about_image_url?: string | null
+          about_title?: string | null
+          contact_enabled?: boolean | null
+          contact_title?: string | null
+          created_at?: string
+          custom_domain?: string | null
+          font_family?: string | null
+          gallery_enabled?: boolean | null
+          gallery_images?: string[] | null
+          gallery_title?: string | null
+          google_analytics_id?: string | null
+          hero_cta_enabled?: boolean | null
+          hero_cta_text?: string | null
+          hero_image_url?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
+          id?: string
+          is_published?: boolean
+          logo_position?: string | null
+          menu_display_style?: string | null
+          menu_enabled?: boolean | null
+          menu_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
+          reservations_description?: string | null
+          reservations_enabled?: boolean | null
+          reservations_title?: string | null
+          restaurant_id: string
+          secondary_color?: string | null
+          show_map?: boolean | null
+          show_opening_hours?: boolean | null
+          show_social_links?: boolean | null
+          subdomain?: string | null
+          theme_color?: string | null
+          updated_at?: string
+        }
+        Update: {
+          about_content?: string | null
+          about_enabled?: boolean | null
+          about_image_url?: string | null
+          about_title?: string | null
+          contact_enabled?: boolean | null
+          contact_title?: string | null
+          created_at?: string
+          custom_domain?: string | null
+          font_family?: string | null
+          gallery_enabled?: boolean | null
+          gallery_images?: string[] | null
+          gallery_title?: string | null
+          google_analytics_id?: string | null
+          hero_cta_enabled?: boolean | null
+          hero_cta_text?: string | null
+          hero_image_url?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
+          id?: string
+          is_published?: boolean
+          logo_position?: string | null
+          menu_display_style?: string | null
+          menu_enabled?: boolean | null
+          menu_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
+          reservations_description?: string | null
+          reservations_enabled?: boolean | null
+          reservations_title?: string | null
+          restaurant_id?: string
+          secondary_color?: string | null
+          show_map?: boolean | null
+          show_opening_hours?: boolean | null
+          show_social_links?: boolean | null
+          subdomain?: string | null
+          theme_color?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_websites_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       restaurants: {
         Row: {
           address: string | null
@@ -449,6 +580,10 @@ export type Database = {
       encrypt_pii:
         | { Args: { data: string; secret_key?: string }; Returns: string }
         | { Args: { plain_text: string }; Returns: string }
+      generate_website_subdomain: {
+        Args: { restaurant_name: string }
+        Returns: string
+      }
       get_all_conversations_with_messages: {
         Args: { p_limit?: number; p_offset?: number }
         Returns: {
@@ -555,6 +690,13 @@ export type Database = {
           display_name: string
           user_id: string
           username: string
+        }[]
+      }
+      get_public_website: {
+        Args: { website_subdomain: string }
+        Returns: {
+          restaurant_data: Json
+          website_config: Json
         }[]
       }
       get_restaurant_by_slug: {
