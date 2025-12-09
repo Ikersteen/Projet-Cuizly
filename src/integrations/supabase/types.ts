@@ -447,8 +447,8 @@ export type Database = {
         }[]
       }
       encrypt_pii:
-        | { Args: { plain_text: string }; Returns: string }
         | { Args: { data: string; secret_key?: string }; Returns: string }
+        | { Args: { plain_text: string }; Returns: string }
       get_all_conversations_with_messages: {
         Args: { p_limit?: number; p_offset?: number }
         Returns: {
